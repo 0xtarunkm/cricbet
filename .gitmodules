@@ -1,0 +1,3 @@
+[submodule "anchor"]
+	path = anchor
+	url = https://github.com/0xtarunkm/anchor-prediction-market.git
