@@ -11,6 +11,9 @@ importers:
       '@coral-xyz/anchor':
         specifier: 0.30.1
         version: 0.30.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@metaplex-foundation/mpl-token-metadata':
+        specifier: ^3.4.0
+        version: 3.4.0(@metaplex-foundation/umi@1.0.0)
       '@radix-ui/react-dialog':
         specifier: ^1.1.6
         version: 1.1.6(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -50,6 +53,9 @@ importers:
       '@tanstack/react-query-next-experimental':
         specifier: ^5.51.11
         version: 5.66.0(@tanstack/react-query@5.66.0(react@18.3.1))(next@14.2.5(@babel/core@7.26.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      bn.js:
+        specifier: ^5.2.1
+        version: 5.2.1
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1088,6 +1094,37 @@ packages:
   '@metamask/utils@5.0.2':
     resolution: {integrity: sha512-yfmE79bRQtnMzarnKfX7AEJBwFTxvTyw3nBQlu/5rmGXrjAeAMltoGxO62TFurxrQAFMNa/fEjIHNvungZp0+g==}
     engines: {node: '>=14.0.0'}
+
+  '@metaplex-foundation/mpl-token-metadata@3.4.0':
+    resolution: {integrity: sha512-AxBAYCK73JWxY3g9//z/C9krkR0t1orXZDknUPS4+GjwGH2vgPfsk04yfZ31Htka2AdS9YE/3wH7sMUBHKn9Rg==}
+    peerDependencies:
+      '@metaplex-foundation/umi': '>= 0.8.2 <= 1'
+
+  '@metaplex-foundation/mpl-toolbox@0.10.0':
+    resolution: {integrity: sha512-84KD1L5cFyw5xnntHwL4uPwfcrkKSiwuDeypiVr92qCUFuF3ZENa2zlFVPu+pQcjTlod2LmEX3MhBmNjRMpdKg==}
+    peerDependencies:
+      '@metaplex-foundation/umi': '>= 0.8.2 <= 1'
+
+  '@metaplex-foundation/umi-options@1.0.0':
+    resolution: {integrity: sha512-DhfwrXTsvOrDwPGT5FpzC7VooLGMRjUSBV8W9xkp+WMxkzbNXeUV+bFmoTNx+0ynLhINp6Ij76W/Rl+4dIwU0w==}
+
+  '@metaplex-foundation/umi-public-keys@1.0.0':
+    resolution: {integrity: sha512-irTc5QGOCgV0mGLY/SU3YOrXVmvEEOrqb1gDvtBtr714X4EtwSv5Aqner9L1/s4PzaXmeN4f86FWFWM3knrlEw==}
+
+  '@metaplex-foundation/umi-serializers-core@1.0.0':
+    resolution: {integrity: sha512-Ov95ARxh179EX6elN6LoHeC+TczirYvzFeIA4gGZKTISpP3sqwRrej6ppnY6qQFk2bFKCKJyvVGiyP2jjuqjJg==}
+
+  '@metaplex-foundation/umi-serializers-encodings@1.0.0':
+    resolution: {integrity: sha512-1278rWbkA9ZAPaq+EXmOwM9pi1LC8eaHsgm0XVFebxsZFkaHbCYPXmB9vkO2jTFFFy4uy5hsYGPRValFl4GdWg==}
+
+  '@metaplex-foundation/umi-serializers-numbers@1.0.0':
+    resolution: {integrity: sha512-OXKX/hQbbc16X7PvpmM2hZ9WrhDBTPJsEcEbRSN4kQewNdmpyMnfXhaqW84Tfc99Ipvyl6Lpe3Dbl/oOTHqong==}
+
+  '@metaplex-foundation/umi-serializers@1.0.0':
+    resolution: {integrity: sha512-9lbVzH2cHjAfhrTm7oJ7+5xnfNz+/J3YY554JZUh+Dw7WxiQUvhs0v5DxrNNGbEZQENjm+gORnZ8WX3a3gW2VA==}
+
+  '@metaplex-foundation/umi@1.0.0':
+    resolution: {integrity: sha512-kCYwVI4REdDW8SwJGjPkef70t3JBPqkyf6k+zu/tBKUXdGh7jOkbZnUghdXk5GZ2Md+bqh9dtM93u/66N6xcWA==}
 
   '@mobily/ts-belt@3.13.1':
     resolution: {integrity: sha512-K5KqIhPI/EoCTbA6CGbrenM9s41OouyK8A03fGJJcla/zKucsgLbz8HNbeseoLarRPgyWJsUyCYqFhI7t3Ra9Q==}
@@ -7737,6 +7774,45 @@ snapshots:
       superstruct: 1.0.4
     transitivePeerDependencies:
       - supports-color
+
+  '@metaplex-foundation/mpl-token-metadata@3.4.0(@metaplex-foundation/umi@1.0.0)':
+    dependencies:
+      '@metaplex-foundation/mpl-toolbox': 0.10.0(@metaplex-foundation/umi@1.0.0)
+      '@metaplex-foundation/umi': 1.0.0
+
+  '@metaplex-foundation/mpl-toolbox@0.10.0(@metaplex-foundation/umi@1.0.0)':
+    dependencies:
+      '@metaplex-foundation/umi': 1.0.0
+
+  '@metaplex-foundation/umi-options@1.0.0': {}
+
+  '@metaplex-foundation/umi-public-keys@1.0.0':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-encodings': 1.0.0
+
+  '@metaplex-foundation/umi-serializers-core@1.0.0': {}
+
+  '@metaplex-foundation/umi-serializers-encodings@1.0.0':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-core': 1.0.0
+
+  '@metaplex-foundation/umi-serializers-numbers@1.0.0':
+    dependencies:
+      '@metaplex-foundation/umi-serializers-core': 1.0.0
+
+  '@metaplex-foundation/umi-serializers@1.0.0':
+    dependencies:
+      '@metaplex-foundation/umi-options': 1.0.0
+      '@metaplex-foundation/umi-public-keys': 1.0.0
+      '@metaplex-foundation/umi-serializers-core': 1.0.0
+      '@metaplex-foundation/umi-serializers-encodings': 1.0.0
+      '@metaplex-foundation/umi-serializers-numbers': 1.0.0
+
+  '@metaplex-foundation/umi@1.0.0':
+    dependencies:
+      '@metaplex-foundation/umi-options': 1.0.0
+      '@metaplex-foundation/umi-public-keys': 1.0.0
+      '@metaplex-foundation/umi-serializers': 1.0.0
 
   '@mobily/ts-belt@3.13.1': {}
 

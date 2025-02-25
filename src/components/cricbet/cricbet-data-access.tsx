@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { useCluster } from '../cluster/cluster-data-access'
 import { useAnchorProvider } from '../solana/solana-provider'
 import anchor from "@coral-xyz/anchor";
+import { BN } from 'bn.js'
 
 export function useCricbetProgram() {
   const { connection } = useConnection()
@@ -94,10 +95,10 @@ export function useCricbetSwap() {
         const tx = await program.methods
           .swap(
             isBuying,
-            new anchor.BN(amountIn),
+            new BN(amountIn),
             isYes,
-            new anchor.BN(minOut),
-            new anchor.BN(expiration)
+            new BN(minOut),
+            new BN(expiration)
           )
           .accountsStrict({
             user: publicKey,
@@ -117,7 +118,7 @@ export function useCricbetSwap() {
           })
           .rpc()
 
-        toast.success(`Success : ${tx}`);
+        toast.success("Transaction successful!");
         return tx
       } catch (error) {
         console.error('Error executing swap:', error)
