@@ -77,7 +77,6 @@ export default function Page() {
                                         <CardContent>
                                             <div className="flex justify-between items-center text-sm text-muted-foreground">
                                                 <span>Ends: {endTime}</span>
-                                                <span className="text-xs text-muted-foreground">{status}</span>
                                             </div>
                                             <div className="mt-2 text-sm">
                                                 <span>Fee: {marketAccount.fee / 100}%</span>

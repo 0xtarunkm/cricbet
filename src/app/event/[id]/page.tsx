@@ -43,7 +43,7 @@ export default function Page({
     }
 
     return (
-        <div className="relative h-full max-w-screen-xl mx-auto w-full p-8 grid grid-cols-1 lg:grid-flow-col pb-16">
+        <div className="relative h-full container  mx-auto w-full p-8 grid grid-cols-1 lg:grid-flow-col pb-16 gap-4">
             <div>
                 <h1 className="text-lg sm:text-2xl lg:text-4xl font-bold">{marketAccount.marketName}</h1>
                 <Chart />

@@ -8,7 +8,7 @@ mod states;
 use contexts::*;
 
 
-declare_id!("2YxHRzumbMVdyN3UGLzPqczxbyPySAALCuiqZLef2BH7");
+declare_id!("5GS7SxkeNhbfKAkWEumHZe9QcJdsxnArtLDrSt5coco9");
 
 #[program]
 pub mod cricbet {
