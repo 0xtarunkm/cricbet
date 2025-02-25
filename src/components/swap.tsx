@@ -35,6 +35,73 @@ export const Swap = ({
     mintNo: PublicKey;
 }) => {
     const [open, setOpen] = useState(false)
+    const [amount, setAmount] = useState<string>("");
+    const [price, setPrice] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAmount(e.target.value);
+    };
+
+    const handleMarketChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        // This is a placeholder - you would replace this with your actual market change logic
+        // For example, you might fetch the current price from an API
+        setPrice(parseFloat(e.target.value) * 0.5); // Example calculation
+    };
+
+    const calculatePrice = () => {
+        // This is a placeholder - you would replace this with your actual price calculation logic
+        // For example, you might fetch the current price from an API
+        return parseFloat(amount) * 0.5; // Example calculation
+    };
+
+    const handleBuy = async () => {
+        // Reset states
+        setError(null);
+        setSuccess(false);
+        setIsLoading(true);
+        
+        try {
+            // Calculate the current price
+            const currentPrice = calculatePrice();
+            
+            // Prepare the trade data
+            const tradeData = {
+                market: market.toString(),
+                price: currentPrice,
+                volume: parseFloat(amount)
+            };
+            
+            // Send the trade data to your API
+            const response = await fetch('/api/trade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tradeData),
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to record trade');
+            }
+            
+            // Trade was successful
+            setSuccess(true);
+            
+            // Optional: Reset the form or show a success message
+            setAmount("");
+            
+        } catch (error) {
+            console.error('Error during trade:', error);
+            setError(error instanceof Error ? error.message : 'An unknown error occurred');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <>
@@ -77,6 +144,11 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
     const { swapMutation } = useCricbetSwap();
     const [isYes, setIsYes] = useState(true);
     const [value, setValue] = useState<string>("");
+    const [amount, setAmount] = useState<string>("");
+    const [price, setPrice] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
     
     const mintUsdc = new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"); // Mainnet USDC
     
@@ -138,7 +210,7 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
         }
         
         try {
-            // Convert value to lamports (multiply by 10^6 for USDC)
+            // Convert value to lamports (multiply by 1_000_000 for USDC)
             const amountLamports = Math.floor(parseFloat(value) * 1_000_000); 
             
             await swapMutation.mutateAsync({
@@ -167,6 +239,56 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
         ? balancesQuery.data?.yesPrice || 0.5
         : balancesQuery.data?.noPrice || 0.5;
     
+    const handleBuy = async () => {
+        // Reset states
+        setError(null);
+        setSuccess(false);
+        setIsLoading(true);
+        
+        try {
+            // Calculate the current price
+            const calculatePrice = () => {
+                return parseFloat(amount) * (isYes ? 
+                    balancesQuery.data?.yesPrice || 0.5 : 
+                    balancesQuery.data?.noPrice || 0.5);
+            };
+            
+            // Prepare the trade data
+            const tradeData = {
+                market: market.toString(),
+                price: currentPrice,
+                volume: parseFloat(amount)
+            };
+            
+            // Send the trade data to your API
+            const response = await fetch('/api/trade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tradeData),
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to record trade');
+            }
+            
+            // Trade was successful
+            setSuccess(true);
+            
+            // Optional: Reset the form or show a success message
+            setAmount("");
+            
+        } catch (error) {
+            console.error('Error during trade:', error);
+            setError(error instanceof Error ? error.message : 'An unknown error occurred');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className={cn("flex flex-col bg-card/40 backdrop-blur-sm rounded-2xl", className)} {...props}>    
             <div className="p-5 space-y-6">
