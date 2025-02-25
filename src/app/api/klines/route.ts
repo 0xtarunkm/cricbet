@@ -4,8 +4,9 @@ import { Pool } from 'pg';
 // Create a PostgreSQL connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // Add SSL configuration if needed for production
-  // ssl: { rejectUnauthorized: false }
+  ssl: {
+    rejectUnauthorized: false // Required for connecting to Supabase from Vercel
+  }
 });
 
 export async function GET(request: NextRequest) {
