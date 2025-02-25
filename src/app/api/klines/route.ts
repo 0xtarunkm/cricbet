@@ -76,7 +76,10 @@ export async function GET(request: NextRequest) {
     // Return the data as JSON
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('Database query error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Database error:', error);
+       return NextResponse.json(
+         { error: 'Internal Server Error', details: (error as Error).message }, 
+         { status: 500 }
+       );
   }
 } 
