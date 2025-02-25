@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-cricbet = "5GS7SxkeNhbfKAkWEumHZe9QcJdsxnArtLDrSt5coco9"
+cricbet = "2MyBTmgixDjf3zZD4S48B1QugFejCxLdh9abgv87mgu2"
 
 [registry]
 url = "https://api.apr.dev"

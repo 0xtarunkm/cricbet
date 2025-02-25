@@ -21,7 +21,7 @@ export function getCricbetProgramId(cluster: Cluster) {
     case 'devnet':
     case 'testnet':
       // This is the program ID for the Cricbet program on devnet and testnet.
-      return new PublicKey('2YxHRzumbMVdyN3UGLzPqczxbyPySAALCuiqZLef2BH7')
+      return new PublicKey('2MyBTmgixDjf3zZD4S48B1QugFejCxLdh9abgv87mgu2')
     case 'mainnet-beta':
     default:
       return CRICBET_PROGRAM_ID

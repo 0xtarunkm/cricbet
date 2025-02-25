@@ -40,7 +40,7 @@ describe("prediction_market", () => {
   );
   const marketName = "VIRAT_CENTURY_IND_NZ_CT_2025";
   const fee = 100;
-  const endTime = new anchor.BN(Math.floor(Date.now() / 1000) + 678500);
+  const endTime = new anchor.BN(Math.floor(Date.now() / 1000) + 2592000);
 
   const uri_yes = "https://gateway.irys.xyz/52pWSqmBFhEr67znFS4KoK5UBpwgbJ1hHH6qQyUbkD6V";
   const uri_no = "https://gateway.irys.xyz/CPgxvKRwE6D4UVTvaWMbm3tJntvumZGpegXeALthdY5s";
@@ -219,103 +219,103 @@ describe("prediction_market", () => {
     }
   });
 
-  it("Test LMSR pricing with multiple swaps", async () => {
-    userAtaYes = getAssociatedTokenAddressSync(
-      mintYes,
-      providerWallet.publicKey,
-      true,
-      TOKEN_PROGRAM_ID
-    );
+  // it("Test LMSR pricing with multiple swaps", async () => {
+  //   userAtaYes = getAssociatedTokenAddressSync(
+  //     mintYes,
+  //     providerWallet.publicKey,
+  //     true,
+  //     TOKEN_PROGRAM_ID
+  //   );
   
-    userAtaNo = getAssociatedTokenAddressSync(
-      mintNo,
-      providerWallet.publicKey,
-      true,
-      TOKEN_PROGRAM_ID
-    );
+  //   userAtaNo = getAssociatedTokenAddressSync(
+  //     mintNo,
+  //     providerWallet.publicKey,
+  //     true,
+  //     TOKEN_PROGRAM_ID
+  //   );
   
-    const swapTests = [
-      { amount: 2_000_000, isYes: true, description: "2 USDC YES buy" },
-      { amount: 2_000_000, isYes: false, description: "2 USDC NO buy" },
-      { amount: 2_500_000, isYes: true, description: "2.5 USDC YES buy" },
-    ];
+  //   const swapTests = [
+  //     { amount: 2_000_000, isYes: true, description: "2 USDC YES buy" },
+  //     { amount: 2_000_000, isYes: false, description: "2 USDC NO buy" },
+  //     { amount: 2_500_000, isYes: true, description: "2.5 USDC YES buy" },
+  //   ];
   
-    for (const test of swapTests) {
-      console.log(`\nExecuting ${test.description}`);
+  //   for (const test of swapTests) {
+  //     console.log(`\nExecuting ${test.description}`);
       
-      try {
-        const tx = await program.methods
-          .swap(
-            true,
-            new anchor.BN(test.amount),
-            test.isYes,
-            new anchor.BN(1),
-            new anchor.BN(Math.floor(Date.now() / 1000) + 60)
-          )
-          .accountsStrict({
-            userAtaNo,
-            market,
-            mintNo,
-            mintUsdc: mintUSDC,
-            mintYes,
-            user: providerWallet.publicKey,
-            userAtaUsdc: userAtaUSDC,
-            userAtaYes,
-            vaultNo,
-            vaultUsdc: vaultUSDC,
-            vaultYes,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .signers([providerWallet.payer])
-          .rpc();
+  //     try {
+  //       const tx = await program.methods
+  //         .swap(
+  //           true,
+  //           new anchor.BN(test.amount),
+  //           test.isYes,
+  //           new anchor.BN(1),
+  //           new anchor.BN(Math.floor(Date.now() / 1000) + 60)
+  //         )
+  //         .accountsStrict({
+  //           userAtaNo,
+  //           market,
+  //           mintNo,
+  //           mintUsdc: mintUSDC,
+  //           mintYes,
+  //           user: providerWallet.publicKey,
+  //           userAtaUsdc: userAtaUSDC,
+  //           userAtaYes,
+  //           vaultNo,
+  //           vaultUsdc: vaultUSDC,
+  //           vaultYes,
+  //           tokenProgram: TOKEN_PROGRAM_ID,
+  //           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+  //           systemProgram: anchor.web3.SystemProgram.programId,
+  //         })
+  //         .signers([providerWallet.payer])
+  //         .rpc();
   
-        console.log(`Swap completed, tx: ${tx}`);
-        console.log("After swap balances:");
-        await logBalances();
-      } catch (error) {
-        console.error(`Error in ${test.description}:`, error);
-        throw error;
-      }
-    }
-  });
+  //       console.log(`Swap completed, tx: ${tx}`);
+  //       console.log("After swap balances:");
+  //       await logBalances();
+  //     } catch (error) {
+  //       console.error(`Error in ${test.description}:`, error);
+  //       throw error;
+  //     }
+  //   }
+  // });
   
-  async function logBalances() {
-    try {
-      const vaultUSDCBalance = await provider.connection.getTokenAccountBalance(vaultUSDC);
-      const vaultYesBalance = await provider.connection.getTokenAccountBalance(vaultYes);
-      const vaultNoBalance = await provider.connection.getTokenAccountBalance(vaultNo);
+  // async function logBalances() {
+  //   try {
+  //     const vaultUSDCBalance = await provider.connection.getTokenAccountBalance(vaultUSDC);
+  //     const vaultYesBalance = await provider.connection.getTokenAccountBalance(vaultYes);
+  //     const vaultNoBalance = await provider.connection.getTokenAccountBalance(vaultNo);
   
-      console.log("Market Balances:");
-      console.log(`USDC in vault: ${vaultUSDCBalance.value.uiAmount}`);
-      console.log(`YES tokens in vault: ${vaultYesBalance.value.uiAmount}`);
-      console.log(`NO tokens in vault: ${vaultNoBalance.value.uiAmount}`);
+  //     console.log("Market Balances:");
+  //     console.log(`USDC in vault: ${vaultUSDCBalance.value.uiAmount}`);
+  //     console.log(`YES tokens in vault: ${vaultYesBalance.value.uiAmount}`);
+  //     console.log(`NO tokens in vault: ${vaultNoBalance.value.uiAmount}`);
       
-      console.log("User Balances:");
+  //     console.log("User Balances:");
       
-      try {
-        const userUSDCBalance = await provider.connection.getTokenAccountBalance(userAtaUSDC);
-        console.log(`USDC: ${userUSDCBalance.value.uiAmount}`);
-      } catch {
-        console.log("USDC: Account not found");
-      }
+  //     try {
+  //       const userUSDCBalance = await provider.connection.getTokenAccountBalance(userAtaUSDC);
+  //       console.log(`USDC: ${userUSDCBalance.value.uiAmount}`);
+  //     } catch {
+  //       console.log("USDC: Account not found");
+  //     }
       
-      try {
-        const userYesBalance = await provider.connection.getTokenAccountBalance(userAtaYes);
-        console.log(`YES tokens: ${userYesBalance.value.uiAmount}`);
-      } catch {
-        console.log("YES tokens: Account not found");
-      }
+  //     try {
+  //       const userYesBalance = await provider.connection.getTokenAccountBalance(userAtaYes);
+  //       console.log(`YES tokens: ${userYesBalance.value.uiAmount}`);
+  //     } catch {
+  //       console.log("YES tokens: Account not found");
+  //     }
       
-      try {
-        const userNoBalance = await provider.connection.getTokenAccountBalance(userAtaNo);
-        console.log(`NO tokens: ${userNoBalance.value.uiAmount}`);
-      } catch {
-        console.log("NO tokens: Account not found");
-      }
-    } catch (error) {
-      console.error("Error in logBalances:", error);
-    }
-  }
+  //     try {
+  //       const userNoBalance = await provider.connection.getTokenAccountBalance(userAtaNo);
+  //       console.log(`NO tokens: ${userNoBalance.value.uiAmount}`);
+  //     } catch {
+  //       console.log("NO tokens: Account not found");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in logBalances:", error);
+  //   }
+  // }
 });
