@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createChart, HistogramSeries, LineSeries } from "lightweight-charts";
 
-// Define the data structure that matches your TimescaleDB views
 interface KlineData {
   bucket: string;
   open: number;
@@ -14,7 +13,6 @@ interface KlineData {
   currency_code: string;
 }
 
-// Time resolution options
 type TimeResolution = '1m' | '1h' | '1w';
 type Market = 'ind_wins' | 'vk_century';
 
