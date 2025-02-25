@@ -106,7 +106,7 @@ export const Swap = ({
     return (
         <>
             <SwapPanel 
-                className="hidden lg:block border border-input w-80 max-w-80 min-w-80 h-fit rounded-2xl p-4" 
+                className="hidden lg:block border border-input w-96 max-w-96 min-w-96 h-fit rounded-2xl p-4" 
                 market={market}
                 mintYes={mintYes}
                 mintNo={mintNo}
@@ -274,8 +274,8 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
     };
 
     return (
-        <div className={cn("flex flex-col bg-card/40 backdrop-blur-sm rounded-2xl", className)} {...props}>    
-            <div className="p-5 space-y-6">
+        <div className={cn("bg-card/40 backdrop-blur-sm rounded-2xl", className)} {...props}>    
+            <div className="">
                 {/* Position Selection */}
                 <div className="space-y-2">
                     <label className="text-sm text-muted-foreground">Select Position</label>
@@ -285,7 +285,7 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                                 key={choice}
                                 className={cn(
                                     "h-12 font-medium transition-all rounded-md border",
-                                    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                                    "focus:outline-none focus:ring-0 focus:ring-ring focus:ring-offset-0",
                                     isYes && choice === "Yes" ? "bg-green-500/20 text-green-500 border-green-500 hover:bg-green-500/30" : 
                                     !isYes && choice === "No" ? "bg-red-500/20 text-red-500 border-red-500 hover:bg-red-500/30" :
                                     "bg-background hover:bg-accent border-input text-foreground"
@@ -299,7 +299,7 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                 {/* Current Price */}
                 <div className="bg-background/50 rounded-lg p-3">
                     <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Current Price:</span>
+                        <span className="text-xs md:text-sm text-muted-foreground">Current Price:</span>
                         <span className="font-medium text-primary">
                             {(currentPrice * 100).toFixed(2)}% (~${currentPrice.toFixed(3)} USDC)
                         </span>
