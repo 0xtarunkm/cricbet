@@ -224,6 +224,34 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                 minOut: Math.floor(amountLamports * 0.97) // 3% slippage
             });
             
+            // After successful swap, record the trade in the database
+            try {
+                // Get current price based on position
+                const currentPrice = isYes 
+                    ? balancesQuery.data?.yesPrice || 0.5
+                    : balancesQuery.data?.noPrice || 0.5;
+                    
+                // Prepare trade data
+                const tradeData = {
+                    market: market.toString().includes('ind_wins') ? 'ind_wins' : 'vk_century',
+                    price: currentPrice,
+                    volume: parseFloat(value)
+                };
+                
+                // Call the trade API
+                await fetch('/api/trade', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(tradeData),
+                });
+                
+            } catch (apiError) {
+                console.error("Failed to record trade in database:", apiError);
+                // Don't show error to user as the swap itself was successful
+            }
+            
             // Reset form and refetch balances on success
             setValue("");
             balancesQuery.refetch();
@@ -239,54 +267,10 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
         ? balancesQuery.data?.yesPrice || 0.5
         : balancesQuery.data?.noPrice || 0.5;
     
-    const handleBuy = async () => {
-        // Reset states
-        setError(null);
-        setSuccess(false);
-        setIsLoading(true);
-        
-        try {
-            // Calculate the current price
-            const calculatePrice = () => {
-                return parseFloat(amount) * (isYes ? 
-                    balancesQuery.data?.yesPrice || 0.5 : 
-                    balancesQuery.data?.noPrice || 0.5);
-            };
-            
-            // Prepare the trade data
-            const tradeData = {
-                market: market.toString(),
-                price: currentPrice,
-                volume: parseFloat(amount)
-            };
-            
-            // Send the trade data to your API
-            const response = await fetch('/api/trade', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tradeData),
-            });
-            
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to record trade');
-            }
-            
-            // Trade was successful
-            setSuccess(true);
-            
-            // Optional: Reset the form or show a success message
-            setAmount("");
-            
-        } catch (error) {
-            console.error('Error during trade:', error);
-            setError(error instanceof Error ? error.message : 'An unknown error occurred');
-        } finally {
-            setIsLoading(false);
-        }
+    const calculatePrice = () => {
+        return parseFloat(amount) * (isYes ? 
+            balancesQuery.data?.yesPrice || 0.5 : 
+            balancesQuery.data?.noPrice || 0.5);
     };
 
     return (
@@ -297,16 +281,17 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                     <label className="text-sm text-muted-foreground">Select Position</label>
                     <div className="grid grid-cols-2 gap-3">
                         {["Yes", "No"].map((choice) => (
-                            <Button
+                            <button
                                 key={choice}
-                                variant="outline"
                                 className={cn(
-                                    "h-12 font-medium transition-all",
-                                    isYes && choice === "Yes" && "bg-green-500/20 text-green-500 border-green-500 hover:bg-green-500/30",
-                                    !isYes && choice === "No" && "bg-red-500/20 text-red-500 border-red-500 hover:bg-red-500/30",
+                                    "h-12 font-medium transition-all rounded-md border",
+                                    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                                    isYes && choice === "Yes" ? "bg-green-500/20 text-green-500 border-green-500 hover:bg-green-500/30" : 
+                                    !isYes && choice === "No" ? "bg-red-500/20 text-red-500 border-red-500 hover:bg-red-500/30" :
+                                    "bg-background hover:bg-accent border-input text-foreground"
                                 )}
                                 onClick={() => setIsYes(choice === "Yes")}
-                            >{choice}</Button>
+                            >{choice}</button>
                         ))}
                     </div>
                 </div>
@@ -325,12 +310,12 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                 <div className="space-y-2">
                     <label className="text-sm text-muted-foreground">Amount (USDC)</label>
                     <div className="relative">
-                        <Input
+                        <input
                             type="text"
                             placeholder="0"
                             value={value.length > 0 ? `${value}` : ""}
                             onChange={(e) => handleChange(e.target.value)}
-                            className="w-full text-xl h-14 text-right pr-14 font-medium bg-background/50"
+                            className="w-full text-xl h-14 text-right pr-14 font-medium bg-background/50 rounded-md border border-input px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         />
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                             USDC
@@ -371,32 +356,22 @@ const SwapPanel = ({ className, market, mintYes, mintNo, ...props }: SwapPanelPr
                 )}
                 
                 {/* Submit Button */}
-                <Button 
-                    className="w-full h-12 text-base font-medium bg-primary hover:bg-primary/90"
-                    onClick={() => {
-                        console.log("Button clicked");
-                        // Double check all parameters are valid
-                        console.log({
-                            publicKey: publicKey?.toString(),
-                            market: market.toString(),
-                            mintYes: mintYes.toString(),
-                            mintNo: mintNo.toString(),
-                            mintUsdc: mintUsdc.toString(),
-                            value,
-                            isYes
-                        });
-                        handleSwap().catch(err => {
-                            console.error("Error in handleSwap:", err);
-                            toast.error("Transaction failed: " + (err.message || "Unknown error"));
-                        });
-                    }}
+                <button 
+                    className={cn(
+                        "w-full h-12 text-base font-medium rounded-md",
+                        "text-white bg-blue-600 hover:bg-blue-700",
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                        "transition-colors duration-200",
+                        "disabled:opacity-50 disabled:cursor-not-allowed"
+                    )}
+                    onClick={handleSwap}
                     disabled={swapMutation.isPending || !value || parseFloat(value) <= 0}
                 >
                     {swapMutation.isPending ? 
                         "Processing..." : 
                         `Buy ${isYes ? "Yes" : "No"} Position`
                     }
-                </Button>
+                </button>
             </div>
         </div>
     )
